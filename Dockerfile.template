@@ -1,0 +1,30 @@
+FROM resin/%%RESIN_MACHINE_NAME%%-debian:stretch
+
+# Enable systemd
+ENV INITSYSTEM on
+
+# Install apt deps
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+    build-essential git xmltoman \
+    autoconf automake libtool libdaemon-dev libpopt-dev libconfig-dev \
+    libasound2-dev \
+    avahi-daemon libavahi-client-dev \
+    libssl-dev \
+    libnss-mdns \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+
+# Install shairport
+RUN git clone https://github.com/mikebrady/shairport-sync.git shairport-sync --depth 1 \
+  && cd shairport-sync && autoreconf -i -f \
+  && ./configure --sysconfdir=/usr/src/app --with-alsa --with-avahi --with-ssl=openssl --with-systemd \
+  && make install \
+  && cd ../ && rm -rf shairport-sync
+
+RUN systemctl disable shairport-sync
+
+COPY . /usr/src/app
+
+# Start app
+CMD [ "bash", "/usr/src/app/start.sh" ]
