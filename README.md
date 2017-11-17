@@ -50,6 +50,13 @@ On the "Environment Variables" page of *each device*, add the following entries:
 [getting-started]: https://docs.resin.io/raspberrypi3/nodejs/getting-started/
 
 
+TODO
+----
+
+- Report playback events to the Dashboard
+- Integrate resin-wifi-connect: https://github.com/resin-io/resin-wifi-connect
+
+
 License
 -------
 
