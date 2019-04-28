@@ -15,9 +15,16 @@ WORKDIR /usr/src/app
 # Install shairport-sync
 RUN git clone https://github.com/mikebrady/shairport-sync.git shairport-sync --depth 1 \
   && cd shairport-sync && autoreconf -i -f \
-  && ./configure --sysconfdir=/etc --with-alsa --with-avahi --with-ssl=openssl --with-systemv \
+  && ./configure --sysconfdir=/etc --with-metadata --with-alsa --with-avahi --with-ssl=openssl --with-systemv \
   && make install \
   && cd ../ && rm -rf shairport-sync
+
+# Install shairport-sync-metadata-reader
+RUN git clone https://github.com/mikebrady/shairport-sync-metadata-reader.git shairport-sync-metadata-reader --depth 1 \
+  && cd shairport-sync-metadata-reader && autoreconf -i -f \
+  && ./configure \
+  && make install \
+  && cd ../ && rm -rf shairport-sync-metadata-reader
 
 COPY . /usr/src/app
 

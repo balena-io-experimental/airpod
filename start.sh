@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 touch /etc/shairport-sync.conf
 cat > /etc/shairport-sync.conf <<EOF
 general = {
@@ -9,6 +7,12 @@ general = {
   password = "${AIRPOD_PASS}";
   volume_range_db = 30;
   drift_tolerance_in_seconds = 0.010;
+};
+metadata = {
+  enabled = "yes";
+  include_cover_art = "no";
+  pipe_name = "/tmp/shairport-sync-metadata";
+  pipe_timeout = 5000;
 };
 EOF
 
@@ -27,7 +31,7 @@ sleep 3
 echo "Started. Advertising server as '${AIRPOD_NAME}'"
 
 while true; do
-  # poll shairport's status and exit if it has exited.
-  service shairport-sync status >/dev/null 2>&1
+  /usr/local/bin/shairport-sync-metadata-reader < /tmp/shairport-sync-metadata
+  echo "ERROR ($?): Reading metadata failed; retrying in 10 seconds..."
   sleep 10
 done
