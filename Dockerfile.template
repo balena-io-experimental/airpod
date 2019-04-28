@@ -1,8 +1,5 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:stretch
 
-# Enable systemd
-ENV INITSYSTEM on
-
 # Install apt deps
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     build-essential git xmltoman \
@@ -15,14 +12,12 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
 
 WORKDIR /usr/src/app
 
-# Install shairport
+# Install shairport-sync
 RUN git clone https://github.com/mikebrady/shairport-sync.git shairport-sync --depth 1 \
   && cd shairport-sync && autoreconf -i -f \
-  && ./configure --sysconfdir=/usr/src/app --with-alsa --with-avahi --with-ssl=openssl --with-systemd \
+  && ./configure --sysconfdir=/etc --with-alsa --with-avahi --with-ssl=openssl --with-systemv \
   && make install \
   && cd ../ && rm -rf shairport-sync
-
-RUN systemctl disable shairport-sync
 
 COPY . /usr/src/app
 

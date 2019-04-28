@@ -2,8 +2,8 @@
 
 set -e
 
-touch shairport-sync.conf
-cat > shairport-sync.conf <<EOF
+touch /etc/shairport-sync.conf
+cat > /etc/shairport-sync.conf <<EOF
 general = {
   name = "${AIRPOD_NAME}";
   password = "${AIRPOD_PASS}";
@@ -14,16 +14,20 @@ EOF
 
 echo 'wireless-power off' >>/etc/network/interfaces
 
-systemctl enable shairport-sync
-systemctl start shairport-sync
+update-rc.d shairport-sync defaults 90 10
+update-rc.d shairport-sync enable
 
-# wait a bit for shairport to start
-sleep 5
+service dbus start || exit 'Failed to start dbus'
+sleep 1
+service avahi-daemon start || exit 'Failed to start avahi'
+sleep 1
+service shairport-sync start || exit 'Failed to start shairport-sync'
+sleep 3
 
 echo "Started. Advertising server as '${AIRPOD_NAME}'"
 
 while true; do
   # poll shairport's status and exit if it has exited.
-  systemctl status shairport-sync >/dev/null 2>&1
+  service shairport-sync status >/dev/null 2>&1
   sleep 10
 done
