@@ -3,7 +3,7 @@
 touch /etc/shairport-sync.conf
 cat > /etc/shairport-sync.conf <<EOF
 general = {
-  name = "${AIRPOD_NAME}";
+  name = "${BALENA_DEVICE_NAME_AT_INIT}";
   password = "${AIRPOD_PASS}";
   volume_range_db = 30;
   drift_tolerance_in_seconds = 0.010;
@@ -28,7 +28,7 @@ sleep 1
 service shairport-sync start || exit 'Failed to start shairport-sync'
 sleep 3
 
-echo "Started. Advertising server as '${AIRPOD_NAME}'"
+echo "Started. Advertising server as '${BALENA_DEVICE_NAME_AT_INIT}'"
 
 while true; do
   /usr/local/bin/shairport-sync-metadata-reader < /tmp/shairport-sync-metadata
