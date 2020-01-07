@@ -43,13 +43,12 @@ and deploy this project with Resin.io.
 
 Use the [Dashboard][dashboard] to configure the app.
 
-On the "Fleet Configuration" page, add a new entry:
-
-  - `BALENA_HOST_CONFIG_audio_pwm_mode`: 2
-
 On the "Environment Variables" page, add the following entry:
 
-  - `AIRPOD_PASS`: a password that should be provided by clients targeting this
+  - `AIRPOD_PASSWORD`: a password that should be provided by clients targeting this
+    device for playback.
+
+  - `AIRPORD_DEVICE_NAME`: a name that is dicoverable by clients targeting this
     device for playback.
 
 That's it. After a few seconds, the device will advertise itself as an Airplay
@@ -57,13 +56,6 @@ target under its name. You can change the device name from the Dashboard.
 
 [dashboard]: https://dashboard.balena-cloud.com/
 [getting-started]: https://www.balena.io/docs/raspberrypi3/nodejs/getting-started/
-
-
-TODO
-----
-
-- Integrate wifi-connect: https://github.com/balena-io/wifi-connect
-
 
 License
 -------
